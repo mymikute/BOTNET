@@ -1,0 +1,176 @@
+import random
+from atexit import register
+from time import sleep
+import os,json,re,sys
+import threading,base64
+import os,time,re,json,random
+from datetime import datetime
+from time import sleep,strftime
+import requests
+from colorama import Fore, Back, Style
+
+
+
+def get_page(cookie,proxies,sttgetpage):
+	headers = {
+		'authority': 'www.facebook.com',
+		'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+		'accept-language': 'vi,en;q=0.9,vi-VN;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5',
+		'cache-control': 'max-age=0',
+		'cookie': cookie,
+		'origin': 'https://www.facebook.com',
+		'referer': 'https://www.facebook.com',
+		'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		'sec-ch-ua-mobile': '?0',
+		'sec-ch-ua-platform': '"Windows"',
+		'sec-fetch-dest': 'document',
+		'sec-fetch-mode': 'navigate',
+		'sec-fetch-site': 'none',
+		'sec-fetch-user': '?1',
+		'upgrade-insecure-requests': '1',
+		'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+	}
+	url_profile = requests.get('https://www.facebook.com/me', headers=headers, proxies=proxies, timeout=20).url
+	profile = requests.get(url_profile, headers=headers).text
+	try:    
+		fb_dtsg = profile.split('{"name":"fb_dtsg","value":"')[1].split('"},')[0]
+	except:
+		fb_dtsg = profile.split(',"f":"')[1].split('","l":null}')[0]
+	idpef = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data={'fb_dtsg': fb_dtsg,'variables': '{"showUpdatedLaunchpointRedesign":true,"useAdminedPagesForActingAccount":false,"useNewPagesYouManage":true}','doc_id': '5300338636681652'}, proxies=proxies, timeout=20).json()
+	a = idpef['data']['viewer']['actor']['profile_switcher_eligible_profiles']['nodes']
+	list=[]
+	print(f"[{sttgetpage}]>> Tìm Thấy:  {len(a)}")
+
+	for lon in a:
+		id=lon['profile']['id']
+		list.append(f'{cookie}; i_user={id};|{fb_dtsg}|')
+	return list
+def UpAVT(cookiesFB,fb_dtsgFB,proxy,listANH):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	print("   ╰─>  Up Ảnh Đại Diện !!",end='\r')
+	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
+	fheaders= {
+		 'authority': 'www.facebook.com',
+		 'accept': '*/*',
+		 'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+		 'cookie': cookiesFB,
+		 'origin': 'https://www.facebook.com',
+		 'referer': 'https://www.facebook.com/'+idpro5,
+		 'sec-ch-prefers-color-scheme': 'dark',
+		 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		 'sec-ch-ua-mobile': '?0',
+		 'sec-ch-ua-platform': '"Windows"',
+		 'sec-fetch-dest': 'empty',
+		 'sec-fetch-mode': 'cors',
+		 'sec-fetch-site': 'same-origin',
+		 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+		 'viewport-width': '979',
+		 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
+		 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
+		 'viewport-width': '1366',}
+	datas = {
+			'av': idpro5,
+			'__user': idpro5,
+			'fb_dtsg': fb_dtsgFB,
+			'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1682522236720,948878,190055527696468,","caption":"","existing_photo_id":"'+random.choice(listANH)+'","expiration_time":null,"profile_id":"'+idpro5+'","profile_pic_method":"EXISTING","profile_pic_source":"TIMELINE","scaled_crop_rect":{"height":0.80058,"width":1,"x":0,"y":0.09971},"skip_cropping":true,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"isPage":false,"isProfile":true,"sectionToken":"UNKNOWN","collectionToken":"UNKNOWN","scale":1}',
+			'server_timestamps': 'true',
+			'doc_id': '6041079162654149',
+	}
+	sleep(2)
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	print("   ╰─> Đã Up Ảnh Đại Diện Lần 1!!",end='\r')
+	sleep(1)
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	print("   ╰─> Đã Up Ảnh Đại Diện Thành Công !!")
+
+	return response.text
+
+def UpBìa(cookiesFB,fb_dtsgFB,proxy,listANH):
+	if proxy.count(":") == 3:
+		pr = proxy.split(":")
+		pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+	else:
+		pr = proxy
+	choose = "http"
+	proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+	BoThuan=UpAVT(cookiesFB,fb_dtsgFB,proxy,listANH)
+	BoThuan=BoThuan.split("photo.php?fbid=")[1].split("&set=a.")[0]
+	print("   ╰─>  Up Bìa !!",end='\r')
+	idpro5=cookiesFB.split('i_user=')[1].split(";")[0]
+	fheaders= {
+		 'authority': 'www.facebook.com',
+		 'accept': '*/*',
+		 'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+		 'cookie': cookiesFB,
+		 'origin': 'https://www.facebook.com',
+		 'sec-ch-prefers-color-scheme': 'dark',
+		 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+		 'sec-ch-ua-mobile': '?0',
+		 'sec-ch-ua-platform': '"Windows"',
+		 'sec-fetch-dest': 'empty',
+		 'sec-fetch-mode': 'cors',
+		 'sec-fetch-site': 'same-origin',
+		 'viewport-width': '979',
+		 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
+		 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
+		 'viewport-width': '1366',}
+	datas = {
+			'fb_dtsg': fb_dtsgFB,
+			'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,unexpected,1687253370139,81087,190055527696468,","cover_photo_id":"'+BoThuan+'","focus":{"x":0.5,"y":0.4997464503042596},"target_user_id":"'+idpro5+'","actor_id":"'+idpro5+'","client_mutation_id":"3"},"scale":1,"contextualProfileContext":null}',
+			'server_timestamps': 'true',
+			'doc_id': '6099517113440760',
+	}
+	response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas)
+	print("   ╰─> Đã Up Bìa Thành Công !!")
+NhapckFB=open("FB.txt").readlines()
+ALLCK=[]
+sttgetpage=0
+for Thuan in NhapckFB:
+	try:
+		sttgetpage+=1
+		Thuan=Thuan.split("\n")[0]
+		cookie=Thuan.split("|")[1]
+		proxy=Thuan.split("|")[0]
+		if proxy.count(":") == 3:
+			pr = proxy.split(":")
+			pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+		else:
+			pr = proxy
+		choose = "http"
+		proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+		Thuans1=get_page(cookie,proxies,sttgetpage)
+		for i in Thuans1:
+			ALLCK.append(i+'|'+proxy)
+	except:print(f"[{sttgetpage}] > Lỗi Mất Rồi :))")
+	
+listANH=[]
+GetFile=open(f"Ảnh.txt").readlines()
+for i in range(len(GetFile)):
+	a = GetFile[i].split('\n')[0]
+	listANH.append(a)
+
+
+stt=0
+for x in ALLCK:
+	stt+=1
+	cookiepr=x.split("|")[0]
+	fbfb=x.split("|")[1]
+	proxy=x.split("|")[2]
+	try:
+		print(f"[{stt}]>>> Pro5 : ",cookiepr.split('i_user=')[1].split(";")[0])
+		UpBìa(cookiepr,fbfb,proxy,listANH)
+	except:
+		print(f"[{stt}]>>xxxxx> Lỗi  : ",cookiepr.split('i_user=')[1].split(";")[0])
+
+
+		
+
+
+
+
