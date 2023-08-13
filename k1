@@ -1,0 +1,25 @@
+import requests,json,os,sys
+from pystyle import Add, Center, Anime, Colors, Colorate, Write, System
+def THUANTOOOL():
+	print(Colorate.Horizontal(Colors.green_to_red,'''
+	 ██████╗ ██╗ █████╗ ███╗   ██╗ ██████╗     ██╗  ██╗███████╗███╗   ██╗██╗   ██╗
+	██╔════╝ ██║██╔══██╗████╗  ██║██╔════╝     ██║ ██╔╝██╔════╝████╗  ██║╚██╗ ██╔╝
+	██║  ███╗██║███████║██╔██╗ ██║██║  ███╗    █████╔╝ █████╗  ██╔██╗ ██║ ╚████╔╝ 
+	██║   ██║██║██╔══██║██║╚██╗██║██║   ██║    ██╔═██╗ ██╔══╝  ██║╚██╗██║  ╚██╔╝  
+	╚██████╔╝██║██║  ██║██║ ╚████║╚██████╔╝    ██║  ██╗███████╗██║ ╚████║   ██║   
+	 ╚═════╝ ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   
+'''))
+os.system("cls" if os.name == "nt" else "clear")
+System.Title(f"TOOL TRAODOISUB.COM ")
+System.Size(90, 30)
+THUANTOOOL()
+
+print("\033[1;37m╔═════════════════════╗")
+print("\033[1;37m║      \033[1;33mNhập Key       \033[1;37m║")
+print("\033[1;37m╚═════════════════════╝")
+KEY=input(">>> Nhập Key Bạn Có : ")
+KEYW=json.loads(str(requests.get('https://raw.githubusercontent.com/mymikute/BOTNET/main/2').text))
+if KEY in KEYW['KEY']:
+	print('[T]> \033[1;36mThông Báo : '+KEYW['KEY'][KEY])
+else:
+	print('[T]> Sai Key')
