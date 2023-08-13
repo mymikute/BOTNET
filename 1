@@ -1,0 +1,504 @@
+import requests
+import os, sys, json, re
+from time import sleep
+session = requests.Session()
+import os, sys, re, json
+from time import sleep
+import random
+from datetime import datetime
+import requests
+from threading import Thread
+import uuid
+from datetime import datetime
+from pystyle import Add, Center, Anime, Colors, Colorate, Write, System
+os.system("cls")
+open('CookiePro5.txt','a')
+open('TDS.txt','a')
+open('FB.txt','a')
+
+def likepage(cookies,fb_dtsg,idpagecanthick,jazoettx):
+	try:
+		idpro5=cookies.split("i_user=")[1].split(';')[0]
+		fheaders= {
+			 'authority': 'www.facebook.com',
+			 'accept': '*/*',
+			 'accept-language': 'vi-VN',
+			 'cookie': cookies,
+			 'origin': 'https://www.facebook.com',
+			 'referer': 'https://www.facebook.com'+idpro5,
+			 'sec-ch-prefers-color-scheme': 'dark',
+			 'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+			 'sec-ch-ua-mobile': '?0',
+			 'sec-ch-ua-platform': '"Windows"',
+			 'sec-fetch-dest': 'empty',
+			 'sec-fetch-mode': 'cors',
+			 'sec-fetch-site': 'same-origin',
+			 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+			 'viewport-width': '979',
+			 'x-fb-friendly-name': 'AdditionalProfilePlusCreationMutation',
+			 'x-fb-lsd': 'ZM7FAk6cuRcUp3imwqvHTY',
+			 'viewport-width': '1366',}
+		datas = {
+				'av': idpro5,
+				'__user': idpro5,
+				'fb_dtsg': fb_dtsg,
+				'jazoest': jazoettx,
+				'variables': '{"input":{"is_tracking_encrypted":false,"page_id":"'+idpagecanthick+'","source":null,"tracking":null,"actor_id":"'+idpro5+'","client_mutation_id":"1"},"scale":1}',
+				'doc_id': '4867271226642619',
+		}
+		response = requests.post('https://www.facebook.com/api/graphql/', headers=fheaders, data=datas).json()
+		return True
+	except:
+		return False
+def reaction(fb_dtsg,cookies,id_post,type,proxy,jazoest):
+	idfb=cookies.split('i_user=')[1].split(";")[0]
+	headers = {
+			'authority': 'www.facebook.com',
+			'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+			'accept-language': 'vi',
+			'cookie': cookies,
+			'sec-ch-prefers-color-scheme': 'light',
+			'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
+			'sec-ch-ua-mobile': '?0',
+			'sec-ch-ua-platform': '"Windows"',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'none',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+			'viewport-width': '1366',
+		}
+	if type == 'LIKE':reac = '1635855486666999'
+	elif type ==  'LOVE':reac  =  '1678524932434102'
+	elif type ==  'CARE':reac = '613557422527858'
+	elif type ==  'HAHA':reac = '115940658764963'
+	elif type ==  'WOW': reac = '478547315650144'
+	elif type ==  'SAD':reac = '908563459236466'
+	elif type ==  'ANGRY':reac = '444813342392137'
+	try:
+		if len(proxy) >= 5:
+			if proxy.count(":") == 3:
+				pr = proxy.split(":")
+				pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+			else:
+				pr = proxy
+			choose = "http"
+			proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+			url = requests.get('https://www.facebook.com/'+id_post, headers=headers, proxies=proxies, timeout=20).url
+			home = requests.get(url, headers=headers).text
+			feedback_id = home.split('{"__typename":"CommentComposerLiveTypingBroadcastPlugin","feedback_id":"')[1].split('","')[0]
+			data = {
+				'fb_dtsg' : fb_dtsg,
+				'jazoest' : jazoest,
+				'fb_api_caller_class': 'RelayModern',
+				'fb_api_req_friendly_name': 'CometUFIFeedbackReactMutation',
+				'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1667106623951,429237,190055527696468,","feedback_id":"'+feedback_id+'","feedback_reaction_id":"'+reac+'","feedback_source":"PROFILE","is_tracking_encrypted":true,"tracking":["AZXg8_yM_zhwrTY7oSTw1K93G-sycXrSreRnRk66aBJ9mWkbSuyIgNqL0zHEY_XgxepV1XWYkuv2C5PuM14WXUB9NGsSO8pPe8qDZbqCw5FLQlsGTnh5w9IyC_JmDiRKOVh4gWEJKaTdTOYlGT7k5vUcSrvUk7lJ-DXs3YZsw994NV2tRrv_zq1SuYfVKqDboaAFSD0a9FKPiFbJLSfhJbi6ti2CaCYLBWc_UgRsK1iRcLTZQhV3QLYfYOLxcKw4s2b1GeSr-JWpxu1acVX_G8d_lGbvkYimd3_kdh1waZzVW333356_JAEiUMU_nmg7gd7RxDv72EkiAxPM6BA-ClqDcJ_krJ_Cg-qdhGiPa_oFTkGMzSh8VnMaeMPmLh6lULnJwvpJL_4E3PBTHk3tIcMXbSPo05m4q_Xn9ijOuB5-KB5_9ftPLc3RS3C24_7Z2bg4DfhaM4fHYC1sg3oFFsRfPVf-0k27EDJM0HZ5tszMHQ"],"session_id":"'+str(uuid.uuid4())+'","actor_id":"'+idfb+'","client_mutation_id":"1"},"useDefaultActor":false,"scale":1}',
+				'server_timestamps': 'true',
+				'doc_id': '5703418209680126',
+			}
+			reaction = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data=data, proxies=proxies, timeout=20).text
+		else:
+			url = requests.get('https://www.facebook.com/'+id_post, headers=headers).url
+			home = requests.get(url, headers=headers).text
+			feedback_id = home.split('{"__typename":"CommentComposerLiveTypingBroadcastPlugin","feedback_id":"')[1].split('","')[0]
+			data = {
+				'fb_dtsg' : fb_dtsg,
+				'jazoest' : jazoest,
+				'fb_api_caller_class': 'RelayModern',
+				'fb_api_req_friendly_name': 'CometUFIFeedbackReactMutation',
+				'variables': '{"input":{"attribution_id_v2":"ProfileCometTimelineListViewRoot.react,comet.profile.timeline.list,via_cold_start,1667106623951,429237,190055527696468,","feedback_id":"'+feedback_id+'","feedback_reaction_id":"'+reac+'","feedback_source":"PROFILE","is_tracking_encrypted":true,"tracking":["AZXg8_yM_zhwrTY7oSTw1K93G-sycXrSreRnRk66aBJ9mWkbSuyIgNqL0zHEY_XgxepV1XWYkuv2C5PuM14WXUB9NGsSO8pPe8qDZbqCw5FLQlsGTnh5w9IyC_JmDiRKOVh4gWEJKaTdTOYlGT7k5vUcSrvUk7lJ-DXs3YZsw994NV2tRrv_zq1SuYfVKqDboaAFSD0a9FKPiFbJLSfhJbi6ti2CaCYLBWc_UgRsK1iRcLTZQhV3QLYfYOLxcKw4s2b1GeSr-JWpxu1acVX_G8d_lGbvkYimd3_kdh1waZzVW333356_JAEiUMU_nmg7gd7RxDv72EkiAxPM6BA-ClqDcJ_krJ_Cg-qdhGiPa_oFTkGMzSh8VnMaeMPmLh6lULnJwvpJL_4E3PBTHk3tIcMXbSPo05m4q_Xn9ijOuB5-KB5_9ftPLc3RS3C24_7Z2bg4DfhaM4fHYC1sg3oFFsRfPVf-0k27EDJM0HZ5tszMHQ"],"session_id":"'+str(uuid.uuid4())+'","actor_id":"'+idfb+'","client_mutation_id":"1"},"useDefaultActor":false,"scale":1}',
+				'server_timestamps': 'true',
+				'doc_id': '5703418209680126',
+			}
+			reaction = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data=data).text
+		return True
+	except:
+		return False
+def tzg(cookie,proxy):
+	try:
+		uag=requests.get('https://raw.githubusercontent.com/thuanantimaythangdectool/hazzzchettietone/main/uagent').text.split("\n")[0]
+		headers = {
+			'authority': 'www.facebook.com',
+			'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+			'accept-language': 'vi',
+			'cookie': cookie,
+			'sec-ch-prefers-color-scheme': 'light',
+			'sec-ch-ua': '"Chromium";v="106", "Google Chrome";v="106", "Not;A=Brand";v="99"',
+			'sec-ch-ua-mobile': '?0',
+			'sec-ch-ua-platform': '"Windows"',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'none',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': uag,
+			'viewport-width': '1366',
+		}
+		if len(proxy) >= 5:
+			if proxy.count(":") == 3:
+				pr = proxy.split(":")
+				pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+			else:
+				pr = proxy
+			choose = "http"
+			proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+			response = requests.get('https://mbasic.facebook.com/',headers=headers, proxies=proxies, timeout=20).text
+			fb_dtsg = response.split('<input type="hidden" name="fb_dtsg" value="')[1].split('"')[0]
+			jazoet = response.split('<input type="hidden" name="jazoest" value="')[1].split('"')[0]
+		else:
+			response = requests.get('https://mbasic.facebook.com/',headers=headers).text
+			fb_dtsg = response.split('<input type="hidden" name="fb_dtsg" value="')[1].split('"')[0]
+			jazoet = response.split('<input type="hidden" name="jazoest" value="')[1].split('"')[0]
+		return fb_dtsg,jazoet
+	except:pass
+def cauhinh(cookies,tokentds):
+	idfb=cookies.split('i_user=')[1].split(";")[0]
+	run = requests.get(f'https://traodoisub.com/api/?fields=run&id={idfb}&access_token={tokentds}').json()
+	if 'success' in run:
+		return True
+	else:
+		return False
+def GetTDS(tk,mk):
+	session = requests.Session()
+	rf_acc='https://traodoisub.com/view/cauhinh'
+	rf_login='https://traodoisub.com/home/'
+	head_login={'Host':'traodoisub.com','accept':'*/*','content-length':'28','accept':'application/json, text/javascript, */*; q=0.01','user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','x-requested-with':'XMLHttpRequest','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://traodoisub.com/','accept-encoding':'gzip, deflate','accept-language':'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',}
+	data_login={
+	'username': tk,
+	'password': mk,
+	}
+	log=session.post(url='https://traodoisub.com/scr/login.php', headers=head_login, data=data_login).text
+	if "success" in log:
+		print(f'TDS : {tk} ',end='')
+	else:
+		print('Đăng Nhập Thất Bại1')
+	sleep(0.2)
+	reg = log
+	m = session.cookies.get_dict()
+	ph = m['PHPSESSID']
+	cktds='PHPSESSID='+ph
+	cookies = {'PHPSESSID': ph}
+	headerss = {'authority': 'traodoisub.com','accept': 'application/json, text/javascript, */*; q=0.01','accept-language': 'en-US,en;q=0.9','referer': 'https://traodoisub.com/view/chtiktok/','sec-ch-ua': '" Not;A Brand";v="99", "Microsoft Edge";v="103", "Chromium";v="103"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49','x-requested-with': 'XMLHttpRequest',}
+	gettk=requests.get('https://traodoisub.com/view/setting/load.php', cookies=cookies, headers=headerss).json()
+	tokentds=gettk['tokentds']
+	head={'Host':'traodoisub.com','accept':'application/json, text/javascript, */*; q=0.01','user-agent':'Mozilla/5.0 (Linux; Android 10; Star 3 Build/QKQ1.200311.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/92.0.4515.115 Mobile Safari/537.36','x-requested-with':'XMLHttpRequest','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':rf_login,'accept-encoding':'gzip, deflate','accept-language':'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7','Cookie':cktds,}
+	check_tk=requests.get(url='https://traodoisub.com/scr/user.php', headers=head).json()['xu']
+	return cktds,tokentds
+def GetTDSa(tk,mk):
+	session = requests.Session()
+	rf_acc='https://traodoisub.com/view/cauhinh'
+	rf_login='https://traodoisub.com/home/'
+	head_login={'Host':'traodoisub.com','accept':'*/*','content-length':'28','accept':'application/json, text/javascript, */*; q=0.01','user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36','content-type':'application/x-www-form-urlencoded; charset=UTF-8','x-requested-with':'XMLHttpRequest','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://traodoisub.com/','accept-encoding':'gzip, deflate','accept-language':'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',}
+	data_login={
+	'username': tk,
+	'password': mk,
+	}
+	log=session.post(url='https://traodoisub.com/scr/login.php', headers=head_login, data=data_login).text
+	if "success" in log:
+		print(f'TDS : {tk} ',end='\r')
+	else:
+		print('Đăng Nhập Thất Bại1')
+	sleep(0.2)
+	reg = log
+	m = session.cookies.get_dict()
+	ph = m['PHPSESSID']
+	cktds='PHPSESSID='+ph
+	cookies = {'PHPSESSID': ph}
+	headerss = {'authority': 'traodoisub.com','accept': 'application/json, text/javascript, */*; q=0.01','accept-language': 'en-US,en;q=0.9','referer': 'https://traodoisub.com/view/chtiktok/','sec-ch-ua': '" Not;A Brand";v="99", "Microsoft Edge";v="103", "Chromium";v="103"','sec-ch-ua-mobile': '?0','sec-ch-ua-platform': '"Windows"','sec-fetch-dest': 'empty','sec-fetch-mode': 'cors','sec-fetch-site': 'same-origin','user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49','x-requested-with': 'XMLHttpRequest',}
+	gettk=requests.get('https://traodoisub.com/view/setting/load.php', cookies=cookies, headers=headerss).json()
+	tokentds=gettk['tokentds']
+	head={'Host':'traodoisub.com','accept':'application/json, text/javascript, */*; q=0.01','user-agent':'Mozilla/5.0 (Linux; Android 10; Star 3 Build/QKQ1.200311.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/92.0.4515.115 Mobile Safari/537.36','x-requested-with':'XMLHttpRequest','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':rf_login,'accept-encoding':'gzip, deflate','accept-language':'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7','Cookie':cktds,}
+	check_tk=requests.get(url='https://traodoisub.com/scr/user.php', headers=head).json()['xu']
+	return cktds,tokentds
+def Delays(s,a):
+	for i in range(s,-1,-1):
+		print(f'Đang Delay {a} : {i}s                                                       ',end='\r')
+		sleep(1)
+def get_page(cookie,fb_dtsg,proxy,stt,jazoest):
+	print(f"</> Đang Tìm Kiếm Pro5",end='\r')
+	try:
+		uid=cookie.split("c_user=")[1].split(';')[0]
+		a=requests.get(f"https://thanhlike.com/modun/tool/get_facebook.php?type=checklive&id={uid}").text
+		print(f"[T] > FB : {stt} | {uid} | {a.upper()} | " ,end='')
+		headers = {
+			'authority': 'www.facebook.com',
+			'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+			'accept-language': 'vi,en;q=0.9,vi-VN;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5',
+			'cache-control': 'max-age=0',
+			'cookie': cookie,
+			'origin': 'https://www.facebook.com',
+			'referer': 'https://www.facebook.com',
+			'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
+			'sec-ch-ua-mobile': '?0',
+			'sec-ch-ua-platform': '"Windows"',
+			'sec-fetch-dest': 'document',
+			'sec-fetch-mode': 'navigate',
+			'sec-fetch-site': 'none',
+			'sec-fetch-user': '?1',
+			'upgrade-insecure-requests': '1',
+			'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+		}
+		if len(proxy) >= 5 :
+			if proxy.count(":") == 3:
+				pr = proxy.split(":")
+				pr = "%s:%s@%s:%s"%(pr[2], pr[3], pr[0], pr[1])
+			else:
+				pr = proxy
+			choose = "http"
+			proxies = {"http": f"{choose}://{pr}" ,"https": f"{choose}://{pr}"}
+			idpef = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data={'fb_dtsg': fb_dtsg,'jazoest': jazoest,'variables': '{"showUpdatedLaunchpointRedesign":true,"useAdminedPagesForActingAccount":false,"useNewPagesYouManage":true}','doc_id': '5300338636681652'}, proxies=proxies, timeout=20).json()
+		else:
+			idpef = requests.post('https://www.facebook.com/api/graphql/', headers=headers, data={'fb_dtsg': fb_dtsg,'jazoest': jazoest,'variables': '{"showUpdatedLaunchpointRedesign":true,"useAdminedPagesForActingAccount":false,"useNewPagesYouManage":true}','doc_id': '5300338636681652'}).json()
+		a = idpef['data']['viewer']['actor']['profile_switcher_eligible_profiles']['nodes']
+		sl = 0
+		listcoolkie=[]
+		Name=[]
+		for b in a:
+			sl +=1
+			uid = b['profile']['id']
+			name = b['profile']['name']
+			delegate_page_id = b['profile']['delegate_page_id']
+			listcoolkie.append(f'{cookie}; i_user={uid}')
+			Name.append(name)
+		print(f'Có : {len(Name)} Page')
+		return listcoolkie,Name,proxy,fb_dtsg
+	except:pass
+try:
+	GET_FILE_tds=open(f"TDS.txt").readline()
+	tk=GET_FILE_tds.split("|")[0]
+	mk=GET_FILE_tds.split("|")[1]
+	cktds,tokentds=GetTDS(tk,mk)
+except:
+	GET_FILE_tds=open(f"TDS.txt","w")
+	print('[T] >  Bạn Thiếu Dữ Liệu Vào TỆP TDS.txt  Định Dạng  TK|MK')
+	quit()
+print("")
+ALLCOOKIE=[]
+#=========================[Các Biến]===============================
+listchucnang=[]
+XuDaLam=0   
+stt=0
+sttloi=0
+webs='traodoisub.com'
+head_job={'Host':f'{webs}','accept':'application/json, text/javascript, */*; q=0.01','Cookie':cktds}
+Cookied=[]
+try:
+	GET_FILEs=open(f"FB.txt").readlines()
+	if len(GET_FILEs) >= 1:
+		for i in range(len(GET_FILEs)):
+				a = GET_FILEs[i].split('\n')[0]
+				Cookied.append(a)
+	else:
+		quit()
+except:
+	GET_FILEs=open(f"FB.txt","w")
+	print('[T] >  Bạn Thiếu Dữ Liệu Vào TỆP FB.txt')
+	quit()
+c=input("[T]> Bạn Có Muốn Lấy Lại Cookie Pro5 Không | Nên Lấy Mỗi Lần Chạy! (y/n) :")
+if c== 'Y' or c== 'y':
+	stt444=0
+	for z in Cookied:
+		stt444+=1
+		try:
+			cookies=z.split('|')[1]
+			proxy=z.split('|')[0]
+		except:
+			cookies=z
+			proxy='??'
+		try:
+			fb_z,jazoett=tzg(cookies,proxy)
+			listcoolkie1,Name1,proxy1,fb_dtsg1=get_page(cookies,fb_z,proxy,stt444,jazoett)
+			for o in range(len(Name1)):
+				ck=listcoolkie1[o]
+				na=Name1[o]
+				pr=proxy1
+				fbfb=fb_dtsg1
+				ALLCOOKIE.append(f'{ck}|{na}|{pr}|{fbfb}|{jazoett}')
+		except:
+			uid=cookies.split("c_user=")[1].split(";")[0]
+			a=requests.get(f"https://thanhlike.com/modun/tool/get_facebook.php?type=checklive&id={uid}").text
+			print(f"[T]> Có Lỗi Sải Ra Với Cookie Số {stt444} | Trạng Thái FB : {a.upper()}")
+	with open('CookiePro5.txt', 'w', encoding='utf-8') as f:
+		for Luu in ALLCOOKIE:
+			f.write(Luu+'\n')
+
+	print("[PC]> Đã Lưu Lại Cookie!\n[T]> Chạy Lại Tool Nhé!")
+else:
+	Tepcoookipr5=open('CookiePro5.txt', encoding='utf-8').readlines()
+	for i in range(len(Tepcoookipr5)):
+			a = Tepcoookipr5[i].split('\n')[0]
+			ALLCOOKIE.append(a)
+if len(ALLCOOKIE) == 0:
+	print("[T]> Không Có Pro5 Nào Để Chạy!")
+	quit()
+sttpro5=0
+print("[T]> Danh Sách Pro5 (Đã Trộn):")
+random.shuffle(ALLCOOKIE)
+random.shuffle(ALLCOOKIE)
+random.shuffle(ALLCOOKIE)
+random.shuffle(ALLCOOKIE)
+for pro5 in ALLCOOKIE:
+	sttpro5+=1
+	idpro5=pro5.split("|")[0].split("i_user=")[1].split(";")[0]
+	namepro5=pro5.split("|")[1]
+	print(f"<{sttpro5}> PRO5 Name : {namepro5} | ID : {idpro5}")
+delaylaylay=int(input("[SETING]> Delay Mỗi Job: "))
+delaylaylaychongblock=int(input("[SETING]> Delay Mỗi Vòng (Chống Block): "))
+sttloi=0
+stt=0
+XuDaLam=0
+sttAcc=0
+CoChuyenKhong=input("[ANTI Mất XU]> Bạn Có Muốn Chuyển Xu Khi Đủ 1m1 Xu không? (y/n): ")
+if CoChuyenKhong=='y'or CoChuyenKhong=='Y':
+	print("[T]> Bạn Cần Tạo Tệp User Acc Muốn Chuyển Đến 'user.txt' Mỗi Acc 1 Dòng Khi Chuyển Sẽ Lưu Lại Vào 'DaChuyen.txt' !")
+	cvb=open(f"user.txt").readline()
+	if len(cvb) <= 2 :
+		print("[Lỗi]> Bạn Chưa Thêm Các User Vào!!")
+		quit()
+CanXoa=[]
+TongCoooki=len(ALLCOOKIE)
+Thongtin=requests.get(f'https://traodoisub.com/api/?fields=profile&access_token={tokentds}').json()['data']['xu']
+print(Colorate.Horizontal(Colors.green_to_cyan,f"""
+
+██████╗ ██████╗  ██████╗     ███████╗
+██╔══██╗██╔══██╗██╔═══██╗    ██╔════╝
+██████╔╝██████╔╝██║   ██║    ███████╗
+██╔═══╝ ██╔══██╗██║   ██║    ╚════██║
+██║     ██║  ██║╚██████╔╝    ███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝     ╚══════╝                                     
+====================================
+|> TDS: {tk}		
+|> Xu Hiện Có: {Thongtin}
+|> Xu Die : None
+====================================
+================================[ Bắt Đầu Bào Xu ]================================\n
+"""))
+GET_FILE_LichSu=open(f"LuuLichSuChay.txt").readlines()
+for i in range(len(GET_FILE_LichSu)):
+	print(i)
+GET_FILE_LichSu=open(f"LuuLichSuChay.txt",'a')
+
+while True:
+	cktds,tokentds=GetTDSa(tk,mk)
+	if len(ALLCOOKIE) == 0:
+		print("[T]> Đã Bị chặn Tắt cả các Acc FB")
+		quit()		
+	sttAcc=0
+	for dle in CanXoa:
+		ALLCOOKIE.remove(dle)
+	CanXoa=[]
+	print(f'```````````````````[ Còn {len(ALLCOOKIE)} Pro5 ]```````````````````')
+	for thuan in ALLCOOKIE:
+		sttloi=0
+		sttAcc+=1
+		cookies=thuan.split('|')[0]
+		NAME=thuan.split('|')[1]
+		proxy=thuan.split('|')[2]
+		fb_z=thuan.split('|')[3]
+		jazoettx=thuan.split('|')[4]
+		cauhinha=cauhinh(cookies,tokentds)
+		idfbpro5=cookies.split('i_user=')[1].split(";")[0]
+		idfbchinh=cookies.split('c_user=')[1].split(";")[0]
+		CheckLiveFB=requests.get(f"https://thanhlike.com/modun/tool/get_facebook.php?type=checklive&id={idfbchinh}").text
+		CheckLivePro5=requests.get(f"https://thanhlike.com/modun/tool/get_facebook.php?type=checklive&id={idfbpro5}").text
+		if len(proxy)>=5:
+			checkproy='Có'
+		else:
+			checkproy='Không'
+		print(f"[T]> PRO5:{idfbpro5}-{CheckLivePro5.upper()} | STT:{sttAcc} | Proxy:{checkproy} | FB:{idfbchinh}-{CheckLiveFB.upper()}")
+		if cauhinha == False:
+			CanXoa.append(thuan)
+			print(f"[X] > Đã Xóa Vì Chưa Được Cấu Hình | Còn {len(ALLCOOKIE)-len(CanXoa)}/{TongCoooki} Pro5")
+		else:
+			try:
+				if CheckLiveFB.upper() == 'DIE':
+					CanXoa.append(thuan)
+					print(f"[X] > Đã Xóa Vì DIE | Còn {len(ALLCOOKIE)-len(CanXoa)}/{TongCoooki} Pro5")
+					quit()
+				try:
+					getlike600=requests.get(f'https://traodoisub.com/api/?fields=likegiare&access_token={tokentds}').json()
+					print(f"Get {len(getlike600)} Like Vip",end='\r')
+					for x in getlike600:
+						id=x['id']
+						type='LIKE'
+						print("[T] Tiến Hành Làm Like vip!                  ",end='\r')
+						reaction(fb_z,cookies,id,type,proxy,jazoettx)
+						print("[T] Tiến Hành Nhận !                 ",end='\r')
+						NhanXu=requests.post(f'https://traodoisub.com/ex/likevip/nhantien.php',headers=head_job,data={'id': id,'type': type}).text
+						if NhanXu == "2":
+							sttloi=0
+							XuDaLam+=600
+							stt+=1
+							Thongtin=requests.get(f'https://traodoisub.com/api/?fields=profile&access_token={tokentds}').json()['data']['xu']
+							print(f'[{stt}]',Colorate.Horizontal(Colors.green_to_cyan,datetime.now().strftime(f'[%H:%M] --> +600 Xu | {Thongtin} Xu | LIKE VIP | {XuDaLam} Xu                                          ')))
+							Delays(delaylaylay,'Nghĩ Mỗi Job')
+				except:pass	
+				while True:
+					NhiemVu=requests.get(url='https://traodoisub.com/ex/reaction/load.php', headers=head_job)
+					if 'error' in NhiemVu.json() and 'countdown' in NhiemVu.json():
+						countdown=int(NhiemVu.json()['countdown'])+3
+						Delays(countdown,'Lấy Job Cảm Xúc')
+					else :
+						print(f"[T]> Đã Lấy Được {len(NhiemVu.json()['data'])}         ",end='\r')
+						break
+				coj=len(NhiemVu.json()['data'])-1
+				for x in NhiemVu.json()['data']:
+					id=x['id']
+					type=x['type']
+					print("[T] Tiến Hành Làm Cảm Xúc!                  ",end='\r')
+					reaction(fb_z,cookies,id,type,proxy,jazoettx)
+					print("[T] Tiến Hành Nhận !                 ",end='\r')
+					NhanXu=requests.post(f'https://traodoisub.com/ex/reaction/nhantien.php',headers=head_job,data={'id': id,'type': type}).text
+					if NhanXu == "2":
+						sttloi=0
+						XuDaLam+=400
+						stt+=1
+						Thongtin=requests.get(f'https://traodoisub.com/api/?fields=profile&access_token={tokentds}').json()['data']['xu']
+						print(f'[{stt}]',Colorate.Horizontal(Colors.green_to_cyan,datetime.now().strftime(f'[%H:%M] --> +400 Xu | {Thongtin} Xu | {type} | {XuDaLam} Xu                                          ')))
+						Delays(delaylaylay,'Nghĩ Mỗi Job')
+					else:
+						sttloi+=1
+						if sttloi >= coj:
+							CanXoa.append(thuan)
+							print(Colorate.Horizontal(Colors.blue_to_red,f"[T] > Đã Bị Chặn Tương Tác Đã Xóa Acc khỏi Đợi Chạy Này | Còn {len(ALLCOOKIE)-len(CanXoa)}/{TongCoooki} Pro5"))
+							quit()
+				try:
+					getlike600=requests.get(f'https://traodoisub.com/api/?fields=likegiare&access_token={tokentds}').json()
+					print(f"Get {len(getlike600)} Like Vip",end='\r')
+					for x in getlike600:
+						id=x['id']
+						type='LIKE'
+						print("[T] Tiến Hành Làm Like vip!                  ",end='\r')
+						reaction(fb_z,cookies,id,type,proxy,jazoettx)
+						print("[T] Tiến Hành Nhận !                 ",end='\r')
+						NhanXu=requests.post(f'https://traodoisub.com/ex/likevip/nhantien.php',headers=head_job,data={'id': id,'type': type}).text
+						if NhanXu == "2":
+							sttloi=0
+							XuDaLam+=600
+							stt+=1
+							Thongtin=requests.get(f'https://traodoisub.com/api/?fields=profile&access_token={tokentds}').json()['data']['xu']
+							print(f'[{stt}]',Colorate.Horizontal(Colors.green_to_cyan,datetime.now().strftime(f'[%H:%M] --> +600 Xu | {Thongtin} Xu | LIKE VIP | {XuDaLam} Xu                                          ')))
+							Delays(delaylaylay,'Nghĩ Mỗi Job')
+				except:pass		
+				try:
+					getlike600=requests.get(f'https://traodoisub.com/api/?fields=likegiare&access_token={tokentds}').json()
+					print(f"Get {len(getlike600)} Like Vip",end='\r')
+					for x in getlike600:
+						id=x['id']
+						type='LIKE'
+						print("[T] Tiến Hành Làm Like vip!                  ",end='\r')
+						reaction(fb_z,cookies,id,type,proxy,jazoettx)
+						print("[T] Tiến Hành Nhận !                 ",end='\r')
+						NhanXu=requests.post(f'https://traodoisub.com/ex/likevip/nhantien.php',headers=head_job,data={'id': id,'type': type}).text
+						if NhanXu == "2":
+							sttloi=0
+							XuDaLam+=600
+							stt+=1
+							Thongtin=requests.get(f'https://traodoisub.com/api/?fields=profile&access_token={tokentds}').json()['data']['xu']
+							print(f'[{stt}]',Colorate.Horizontal(Colors.green_to_cyan,datetime.now().strftime(f'[%H:%M] --> +600 Xu | {Thongtin} Xu | LIKE VIP | {XuDaLam} Xu                                          ')))
+							Delays(delaylaylay,'Nghĩ Mỗi Job')
+				except:pass				
+			except:pass
+
+
